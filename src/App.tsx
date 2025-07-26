@@ -3,11 +3,14 @@ import logo from './logo.svg';
 import './App.css';
 import { useQuery } from '@tanstack/react-query';
 
+const API_URL =
+  (window as any).API_URL && (window as any).API_URL !== "__API_URL__"
+    ? (window as any).API_URL
+    : "http://localhost:5050";
+
 async function fetchMessage() {
-  const res = await fetch(
-    `${process.env.REACT_APP_API_URL || 'http://localhost:5050'}/api/message`
-  );
-  if (!res.ok) throw new Error('Failed to fetch message');
+  const res = await fetch(`${API_URL}/api/message`);
+  if (!res.ok) throw new Error("Failed to fetch message");
   return res.json();
 }
 
@@ -15,8 +18,8 @@ function App() {
   const { data, error, isLoading } = useQuery({
     queryKey: ['message'],
     queryFn: fetchMessage,
-    refetchInterval: 2000, // 👈 refetch every 2 seconds
-    refetchOnWindowFocus: true, // also refetch when tab is focused
+    refetchInterval: 2000,
+    refetchOnWindowFocus: true,
   });
 
   return (

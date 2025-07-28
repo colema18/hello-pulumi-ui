@@ -17,14 +17,16 @@ WORKDIR /usr/share/nginx/html
 # Copy built files
 COPY --from=build /app/build ./
 
-# Install bash and envsubst tools
-RUN apk add --no-cache bash
+# ✅ Install required tools for runtime replacement
+RUN apk add --no-cache bash grep sed
 
-# Copy runtime env injection script
+# ✅ Copy runtime env injection script
 COPY env.sh /docker-entrypoint.d/env.sh
 RUN chmod +x /docker-entrypoint.d/env.sh
 
-# Expose port 80
-EXPOSE 80
+# ✅ Optional: Custom Nginx config (if you have one)
+# COPY nginx.conf /etc/nginx/nginx.conf
 
+EXPOSE 80
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]

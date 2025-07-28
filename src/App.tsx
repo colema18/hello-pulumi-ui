@@ -4,12 +4,16 @@ import './App.css';
 import { useQuery } from '@tanstack/react-query';
 
 const API_URL =
-  (window as any).API_URL && (window as any).API_URL !== "__API_URL__"
-    ? (window as any).API_URL
-    : "http://localhost:5050";
+  (window as any).API_URL === "__API_URL__"
+    ? "http://localhost:5050"
+    : (window as any).API_URL;
+
 
 async function fetchMessage() {
-  const res = await fetch(`${API_URL}/api/message`);
+  // ✅ Apply fallback only when the placeholder was not replaced
+  const finalUrl = API_URL === "__API_URL__" ? "http://localhost:5050" : API_URL;
+
+  const res = await fetch(`${finalUrl}/api/message`);
   if (!res.ok) throw new Error("Failed to fetch message");
   return res.json();
 }

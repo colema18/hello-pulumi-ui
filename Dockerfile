@@ -17,14 +17,14 @@ WORKDIR /usr/share/nginx/html
 # Copy built files
 COPY --from=build /app/build ./
 
-# ✅ Install required tools for runtime replacement
+# Install required tools for runtime replacement
 RUN apk add --no-cache bash grep sed
 
-# ✅ Copy runtime env injection script
+# Copy runtime env injection script
 COPY env.sh /docker-entrypoint.d/env.sh
 RUN chmod +x /docker-entrypoint.d/env.sh
 
-# ✅ Optional: Custom Nginx config (if you have one)
+# Optional: Custom Nginx config (if you have one)
 # COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
